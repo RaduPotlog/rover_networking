@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="rutx11/icons/Logo-Arm-WhiteOrange-372x372-1.png" alt="Mechatronics Academy" width="140">
+</p>
+
 # rover_networking
 
 Networking for the Rover A1. The repo sits in the ROS workspace's `src/`; nothing in it is a ROS
