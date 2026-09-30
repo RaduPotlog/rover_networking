@@ -1,0 +1,25 @@
+Cell 01 - Address: AA:BB:CC:00:11:22
+          ESSID: "Orange-Tekwill"
+          Mode: Master  Frequency: 2.437 GHz  Band: 2.4 GHz  Channel: 6
+          Signal: -58 dBm  Quality: 52/70
+          Encryption: WPA2 PSK (CCMP)
+          HT Operation:
+                    Primary Channel: 6
+
+Cell 02 - Address: 11:22:33:44:55:66
+          ESSID: "Field Hotspot"
+          Mode: Master  Channel: 44
+          Signal: -71 dBm  Quality: 39/70
+          Encryption: mixed WPA2/WPA3 PSK/SAE (CCMP)
+
+Cell 03 - Address: 11:22:33:44:55:67
+          ESSID: unknown
+          Mode: Master  Channel: 1
+          Signal: -80 dBm  Quality: 30/70
+          Encryption: none
+
+Cell 04 - Address: 22:22:33:44:55:68
+          ESSID: "Corp"
+          Mode: Master  Channel: 11
+          Signal: -66 dBm  Quality: 44/70
+          Encryption: WPA2 802.1X (CCMP)

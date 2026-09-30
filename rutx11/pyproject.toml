@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rover-rutx11-netui"
+version = "0.2.0"
+description = "Switch the Teltonika RUTX11 Wi-Fi uplink in place and keep its firewall/NAT consistent"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+# Pinned in requirements.txt for the rover image; ranges here for laptops.
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "paramiko>=3.4",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "httpx"]
+
+[project.scripts]
+rover-netui = "uplink_manager.presentation.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["uplink_manager*"]
+
+[tool.setuptools.package-data]
+"uplink_manager.presentation" = ["static/*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["test"]

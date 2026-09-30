@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rover Network</title>
+<link rel="icon" type="image/png" href="/icons/LogoMATransparentRound-80x80-1.png">
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #fff; --fg: #1d2330; --muted: #667085; --line: #e3e6eb;
+    --brand: #ffaa00; --on-brand: #1f1500; --accent: #945a00; --ok: #1a7f37; --warn: #9a6700; --err: #cf222e; --code: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1115; --card: #181b21; --fg: #e6e8eb; --muted: #9aa3ad; --line: #2a2f37;
+            --brand: #ffaa00; --on-brand: #1f1500; --accent: #ffb52e; --ok: #3fb950; --warn: #d29922; --err: #f85149; --code: #11141a; }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 18px 16px 6px; max-width: 920px; margin: 0 auto; display: flex; gap: 14px; align-items: center; }
+  header img { width: 56px; height: 56px; flex: none; }
+  header h1 { font-size: 20px; margin: 0; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  main { max-width: 920px; margin: 0 auto; padding: 8px 16px 40px; display: grid; gap: 14px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  h2 { font-size: 16px; margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+  h2 .grow { flex: 1; }
+  button { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--fg);
+           padding: 6px 12px; border-radius: 7px; cursor: pointer; }
+  button.primary { background: var(--brand); border-color: var(--brand); color: var(--on-brand); font-weight: 600; }
+  a { color: var(--accent); }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  button.danger { color: var(--err); }
+  button:disabled { opacity: .5; cursor: default; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 13px; font-weight: 600; }
+  .pill.ok { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+  .pill.warn { background: color-mix(in srgb, var(--warn) 15%, transparent); color: var(--warn); }
+  .pill.error { background: color-mix(in srgb, var(--err) 15%, transparent); color: var(--err); }
+  .pill.idle { background: var(--line); color: var(--muted); }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+  dt { color: var(--muted); } dd { margin: 0; overflow-wrap: anywhere; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; font-size: 13px; }
+  tbody tr { cursor: pointer; } tbody tr:hover { background: color-mix(in srgb, var(--brand) 10%, transparent); }
+  tbody tr.sel { background: color-mix(in srgb, var(--brand) 22%, transparent); }
+  tbody tr.nope { cursor: default; color: var(--muted); }
+  .bars { font-family: ui-monospace, monospace; letter-spacing: -1px; }
+  .form { margin-top: 12px; display: grid; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+  .form label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  input, select { font: inherit; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px;
+                  background: var(--bg); color: var(--fg); width: 100%; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .note { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+  .checks { list-style: none; margin: 0; padding: 0; }
+  .checks li { padding: 8px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 22px 1fr; gap: 6px; }
+  .checks li:last-child { border-bottom: 0; }
+  .icon.ok { color: var(--ok); } .icon.warn { color: var(--warn); } .icon.error { color: var(--err); }
+  .checks .detail { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 7px; padding: 10px;
+        font-size: 12.5px; overflow-x: auto; white-space: pre-wrap; margin: 8px 0 0; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  .err { color: var(--err); }
+  .scroll { overflow-x: auto; }
+  @media (max-width: 560px) { .hide-sm { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <img src="/icons/LogoMATransparentRound-80x80-1.png" alt="Mechatronics Academy" onerror="this.remove()">
+  <div>
+  <h1>Rover network</h1>
+  <p>Wi-Fi uplink of the RUTX11 router. Every change is verified. If the new network does not
+     work within about a minute, the router restores the previous one automatically.</p>
+  </div>
+</header>
+<main>
+  <section id="status-card">
+    <h2><span class="grow">Internet uplink</span><span id="status-pill" class="pill idle">checking…</span>
+      <button id="refresh">Refresh</button></h2>
+    <dl id="status"></dl>
+    <p id="status-err" class="note err"></p>
+  </section>
+
+  <section>
+    <h2><span class="grow">Connect to a Wi-Fi network</span>
+      <button id="scan" class="primary">Scan</button></h2>
+    <div class="scroll">
+      <table id="nets" hidden>
+        <thead><tr><th>Network</th><th class="hide-sm">Band</th><th>Signal</th><th>Security</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="scan-note" class="note">Scan to list networks the router can see.
+      <a href="#" id="manual">Hidden network…</a></p>
+    <form id="connect" class="form" hidden autocomplete="off">
+      <label>Network <input id="f-ssid" required maxlength="32"></label>
+      <label id="enc-wrap" hidden>Security
+        <select id="f-enc">
+          <option value="psk2">WPA2-PSK</option><option value="sae-mixed">WPA2/WPA3</option>
+          <option value="sae">WPA3-SAE</option><option value="psk-mixed">WPA/WPA2</option>
+          <option value="none">Open</option>
+        </select></label>
+      <label id="key-wrap">Password
+        <div class="row"><input id="f-key" type="password" maxlength="64" style="flex:1">
+          <button type="button" id="show-key">Show</button></div></label>
+      <div class="row">
+        <button type="submit" class="primary" id="connect-btn">Connect</button>
+        <button type="button" id="cancel">Cancel</button>
+      </div>
+      <p class="note">The rover's own LAN and AP stay up during the switch. Only the internet uplink
+        changes, and it is rolled back if it fails.</p>
+    </form>
+  </section>
+
+  <section>
+    <h2><span class="grow">Health check</span><span id="audit-pill" class="pill idle">…</span>
+      <button id="repair" hidden>Repair</button></h2>
+    <ul class="checks" id="checks"></ul>
+    <details id="repair-preview" hidden><summary>Commands Repair will run</summary><pre></pre></details>
+    <p id="pending" class="note err" hidden></p>
+  </section>
+
+  <section id="job-card" hidden>
+    <h2><span class="grow" id="job-title">Job</span><span id="job-pill" class="pill idle"></span></h2>
+    <pre id="job-log"></pre>
+  </section>
+</main>
+<script>
+'use strict';
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+let selected = null, busy = false;
+
+async function api(path, body) {
+  const opt = body === undefined ? {} : {
+    method: 'POST', headers: {'Content-Type': 'application/json', 'X-Requested-With': 'netui'},
+    body: JSON.stringify(body)};
+  const r = await fetch(path, opt);
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.detail ? (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)) : r.statusText);
+  return data;
+}
+
+function bars(dbm) {
+  if (dbm == null) return '';
+  const n = dbm >= -55 ? 4 : dbm >= -65 ? 3 : dbm >= -75 ? 2 : 1;
+  return `<span class="bars">${'▮'.repeat(n)}${'▯'.repeat(4 - n)}</span> ${dbm} dBm`;
+}
+
+async function loadStatus() {
+  $('#status-err').textContent = '';
+  try {
+    const s = await api('/api/status');
+    const rt = s.runtime, cfg = s.configured;
+    const pill = $('#status-pill');
+    pill.className = 'pill ' + (s.healthy ? 'ok' : 'error');
+    pill.textContent = s.healthy ? 'Online' : (rt.ssid ? 'No internet' : 'Not connected');
+    $('#status').innerHTML = `
+      <dt>Network</dt><dd>${esc(rt.ssid || '—')}${cfg.ssid && cfg.ssid !== rt.ssid ? ` <span class="err">(configured: ${esc(cfg.ssid)})</span>` : ''}</dd>
+      <dt>Signal</dt><dd>${rt.signal != null ? bars(rt.signal) + (rt.channel ? `, channel ${rt.channel}` : '') : '—'}</dd>
+      <dt>Address</dt><dd>${esc(rt.ipv4 || '—')}${rt.gateway ? ` via ${esc(rt.gateway)}` : ''}</dd>
+      <dt>Interface</dt><dd>${esc(s.settings.uplink_iface)}${s.settings.auto ? ' (auto-detected)' : ''}, ${esc(rt.device || '?')} on ${esc(cfg.radio || '?')}</dd>
+      <dt>Internet</dt><dd>${rt.internet ? 'reachable' : 'unreachable'}</dd>
+      <dt>LAN / AP clients</dt><dd>${rt.masquerade ? 'NAT active: ' + esc(s.settings.client_nets.join(', ')) + ' have internet' : '<span class="err">no NAT on the uplink</span>'}</dd>`;
+  } catch (e) {
+    $('#status-pill').className = 'pill error'; $('#status-pill').textContent = 'Router unreachable';
+    $('#status-err').textContent = e.message;
+  }
+}
+
+async function loadAudit() {
+  try {
+    const a = await api('/api/audit');
+    const bad = a.checks.filter((c) => c.status === 'error').length;
+    const warn = a.checks.filter((c) => c.status === 'warn').length;
+    $('#audit-pill').className = 'pill ' + (bad ? 'error' : warn ? 'warn' : 'ok');
+    $('#audit-pill').textContent = bad ? `${bad} problem${bad > 1 ? 's' : ''}` : warn ? `${warn} warning${warn > 1 ? 's' : ''}` : 'All good';
+    const icon = {ok: '✓', warn: '!', error: '✗'};
+    $('#checks').innerHTML = a.checks.map((c) => `
+      <li><span class="icon ${c.status}">${icon[c.status]}</span><div>
+        <div>${esc(c.title)}</div><div class="detail">${esc(c.detail)}</div>
+        ${c.actions.length ? `<div class="row" style="margin-top:6px">${c.actions.map((x) =>
+          `<button data-action="${esc(x.id)}" class="${x.id.startsWith('delete') ? 'danger' : ''}"
+             title="${esc(x.preview.join('\n'))}">${esc(x.label)}</button>`).join('')}</div>` : ''}
+      </div></li>`).join('');
+    $('#repair').hidden = a.repair.length === 0;
+    $('#repair-preview').hidden = a.repair.length === 0;
+    $('#repair-preview pre').textContent = a.repair.join('\n');
+    $('#pending').hidden = !a.pending;
+    $('#pending').textContent = a.pending ? 'Uncommitted changes on the router (RutOS web UI). Save or discard them there before switching:\n' + a.pending : '';
+    document.querySelectorAll('[data-action]').forEach((b) => b.onclick = () => runAction(b.dataset.action, b.textContent));
+  } catch (e) {
+    $('#audit-pill').className = 'pill error'; $('#audit-pill').textContent = 'unavailable';
+    $('#checks').innerHTML = `<li><span class="icon error">✗</span><div>${esc(e.message)}</div></li>`;
+  }
+}
+
+async function scan() {
+  $('#scan').disabled = true; $('#scan').textContent = 'Scanning…';
+  try {
+    const nets = await api('/api/scan');
+    const tb = $('#nets tbody');
+    tb.innerHTML = nets.map((n, i) => `
+      <tr data-i="${i}" class="${n.encryption === 'unsupported' ? 'nope' : ''}">
+        <td>${esc(n.ssid)}${n.aps > 1 ? ` <span class="note">(${n.aps} APs)</span>` : ''}</td><td class="hide-sm">${esc(n.band)}</td><td>${bars(n.signal)}</td>
+        <td>${n.encryption === 'unsupported' ? 'Unsupported: ' : ''}${esc(n.security || n.encryption)}</td></tr>`).join('');
+    $('#nets').hidden = nets.length === 0;
+    $('#scan-note').firstChild.textContent = nets.length ? `${nets.length} networks. Click one to connect. ` : 'No networks found. ';
+    tb.querySelectorAll('tr').forEach((tr) => tr.onclick = () => {
+      const n = nets[+tr.dataset.i];
+      if (n.encryption === 'unsupported') return;
+      tb.querySelectorAll('tr').forEach((x) => x.classList.remove('sel')); tr.classList.add('sel');
+      openForm(n);
+    });
+  } catch (e) {
+    $('#scan-note').firstChild.textContent = 'Scan failed: ' + e.message + ' ';
+  } finally {
+    $('#scan').disabled = busy; $('#scan').textContent = 'Scan';
+  }
+}
+
+function openForm(net) {
+  selected = net;
+  $('#connect').hidden = false;
+  $('#f-ssid').value = net ? net.ssid : '';
+  $('#f-ssid').readOnly = !!net;
+  $('#enc-wrap').hidden = !!net;
+  $('#f-key').value = '';
+  syncKey();
+  (net ? $('#f-key') : $('#f-ssid')).focus();
+}
+function syncKey() {
+  const enc = selected ? selected.encryption : $('#f-enc').value;
+  $('#key-wrap').hidden = enc === 'none' || enc === 'owe';
+}
+
+async function connect(ev) {
+  ev.preventDefault();
+  const body = {
+    ssid: $('#f-ssid').value,
+    encryption: selected ? selected.encryption : $('#f-enc').value,
+    key: $('#f-key').value || null,
+    radio: selected ? selected.radio : null,
+  };
+  if (!confirm(`Switch the rover's internet uplink to "${body.ssid}"?`)) return;
+  try {
+    const {job} = await api('/api/switch', body);
+    $('#f-key').value = '';
+    $('#connect').hidden = true;
+    followJob(job, `Connecting to ${body.ssid}`);
+  } catch (e) { alert(e.message); }
+}
+
+async function runAction(id, label) {
+  if (!confirm(label + '?')) return;
+  try { followJob((await api('/api/action', {id})).job, label); } catch (e) { alert(e.message); }
+}
+
+async function repair() {
+  if (!confirm('Apply the listed repairs on the router?')) return;
+  try { followJob((await api('/api/repair', {})).job, 'Repair'); } catch (e) { alert(e.message); }
+}
+
+function setBusy(b) {
+  busy = b;
+  ['#scan', '#connect-btn', '#repair'].forEach((s) => $(s).disabled = b);
+  document.querySelectorAll('[data-action]').forEach((x) => x.disabled = b);
+}
+
+async function followJob(id, title) {
+  setBusy(true);
+  $('#job-card').hidden = false; $('#job-title').textContent = title;
+  $('#job-card').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  for (;;) {
+    let j;
+    try { j = await api('/api/jobs/' + id); } catch (e) { await new Promise((r) => setTimeout(r, 2000)); continue; }
+    const t0 = j.started;
+    $('#job-log').textContent = j.log.map((l) => `+${(l.t - t0).toFixed(0).padStart(3)}s  ${l.msg}`).join('\n');
+    const pill = $('#job-pill');
+    pill.className = 'pill ' + ({running: 'idle', succeeded: 'ok', failed: 'error'}[j.status]);
+    pill.textContent = j.status === 'running' ? 'working…' : j.result;
+    if (j.status !== 'running') break;
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+  setBusy(false);
+  loadStatus(); loadAudit();
+}
+
+async function resumeJob() {
+  try {
+    const j = await api('/api/jobs');
+    if (j.current) followJob(j.current, 'Job in progress');
+  } catch (e) { /* status card shows the error */ }
+}
+
+$('#refresh').onclick = () => { loadStatus(); loadAudit(); };
+$('#scan').onclick = scan;
+$('#manual').onclick = (e) => { e.preventDefault(); document.querySelectorAll('#nets tr').forEach((x) => x.classList.remove('sel')); openForm(null); };
+$('#f-enc').onchange = syncKey;
+$('#connect').onsubmit = connect;
+$('#cancel').onclick = () => { $('#connect').hidden = true; selected = null; };
+$('#show-key').onclick = () => { const k = $('#f-key'); k.type = k.type === 'password' ? 'text' : 'password'; $('#show-key').textContent = k.type === 'password' ? 'Show' : 'Hide'; };
+$('#repair').onclick = repair;
+loadStatus(); loadAudit(); resumeJob();
+</script>
+</body>
+</html>
