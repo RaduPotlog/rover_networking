@@ -265,7 +265,7 @@ router-side rollback keeps the router safe either way.
 ## Run it on the rover
 
 [rover_docker](https://github.com/RaduPotlog/rover_docker) builds the service
-`rover-a1-network` from this folder. Its Dockerfile clones `main` (pin a commit with
+`rover-a1-network` from this folder. Its Dockerfile clones `master` (pin a commit with
 `--build-arg ROVER_NETWORKING_REF=<sha>`) and runs the tests during the build, so a failing test
 fails the push. Deploy with `balena push … --nocache`, then open
 `http://<rover-lan-ip>:5080/` and log in as `rover` with `NETUI_PASSWORD`.
